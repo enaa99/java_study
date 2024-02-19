@@ -1,23 +1,24 @@
 package Hello.example.spring.aop;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 @Aspect
+@Slf4j
 public class TimeTraceAop {
     @Around("execution(* Hello.example.spring..s*(..))")
     public Object execute(ProceedingJoinPoint joinPoint) throws Throwable{
         long time = System.currentTimeMillis();
-        System.out.println("START : " +joinPoint.toString());
+        log.info("START: {}", joinPoint.toString());
         try{
             return joinPoint.proceed();
 
         }finally {
             long finish = System.currentTimeMillis();
             long timeMs = finish -time;
-            System.out.println("END : "+ joinPoint.toString() + timeMs+"ms");
-            System.out.println(timeMs);
+            log.info("END : {} {}ms", joinPoint.toString(), timeMs);
         }
     }
 }
